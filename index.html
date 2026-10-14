@@ -632,7 +632,6 @@
         }
       }
 
-      // Tunggu KaTeX siap, lalu render ulang seluruh app
       window.addEventListener('load', function () {
         setTimeout(() => renderMath(document.getElementById('appContainer')), 100);
         setTimeout(() => renderMath(document.getElementById('appContainer')), 500);
@@ -755,7 +754,6 @@
         const r = Math.round(v * 1000) / 1000;
         return String(r).replace('-', '−');
       }
-      // Bentuk LaTeX dari ax² + bx + c (tanpa "=0")
       function polyTeX(a, b, c, v) {
         v = v || 'x';
         let s = '';
@@ -780,12 +778,6 @@
       }
       function eqTeX(a, b, c, v) {
         return polyTeX(a, b, c, v) + ' = 0';
-      }
-      // Akar dalam LaTeX
-      function rootTeX(v) {
-        const rounded = Math.round(v * 1000) / 1000;
-        if (Math.abs(rounded - v) < 1e-9) return String(rounded).replace('-', '-');
-        return '\\approx ' + rounded;
       }
 
       function analisisKuadrat(a, b, c) {
@@ -1108,8 +1100,8 @@
             const A = -a, B = -b, C = -c;
             const s1 = analisisKuadrat(a, b, c);
             const s2 = analisisKuadrat(A, B, C);
-            const akar1 = s1.akar.length ? s1.akar.map(v => fmtNum(v)).join(',\\;') : '\\text{tidak real}';
-            const akar2 = s2.akar.length ? s2.akar.map(v => fmtNum(v)).join(',\\;') : '\\text{tidak real}';
+            const akar1 = s1.akar.length ? s1.akar.map(v => fmtNum(v)).join(' , ') : 'tidak real';
+            const akar2 = s2.akar.length ? s2.akar.map(v => fmtNum(v)).join(' , ') : 'tidak real';
             out.innerHTML =
               'P1: \\[' + eqTeX(a, b, c, 'x') + '\\] akar: \\(' + akar1 + '\\)<br>' +
               'P2: \\[' + eqTeX(A, B, C, 'x') + '\\] akar: \\(' + akar2 + '\\)<br>' +
@@ -1607,7 +1599,7 @@
       };
 
       /* =====================================================
-         7. QUIZ DATA — 10 SOAL (dengan LaTeX)
+         7. QUIZ DATA — 10 SOAL
       ===================================================== */
       const GOOGLE_SHEETS_WEBAPP_URL =
         'https://script.google.com/macros/s/AKfycbxhjUkOKVvgTFXSLdl39ptq2X8ucH80dl_h8C6eE9u9WkzrrEGxDapCjRUbc05WaoOI/exec';
@@ -1616,52 +1608,52 @@
         {
           q: 'Persamaan kuadrat \\(7 - 3x + 2x^{2} = 0\\) ekuivalen dengan \\(ax^{2} + bx + c = 0\\). Nilai \\(c - b - a = \\ldots\\)',
           o: ['\\(-10\\)', '\\(-6\\)', '\\(0\\)', '\\(8\\)', '\\(10\\)'],
-          c: '8',
+          c: 3,
         },
         {
           q: 'Akar negatif dari persamaan kuadrat \\(x^{2} + 4x - 12 = 0\\) adalah …',
           o: ['\\(-8\\)', '\\(-6\\)', '\\(3\\)', '\\(4\\)', '\\(6\\)'],
-          c: '−6',
+          c: 1,
         },
         {
           q: 'Akar-akar dari persamaan kuadrat \\(x^{2} + 2x + 8 = 0\\) adalah …',
           o: ['Real dan berbeda', 'Dua akar kembar', 'Tidak real', 'Rasional', 'Irasional'],
-          c: 'Tidak real',
+          c: 2,
         },
         {
           q: 'Jumlah akar-akar dari persamaan kuadrat \\(x^{2} - 5x - 24 = 0\\) adalah …',
           o: ['\\(5\\)', '\\(-5\\)', '\\(1\\)', '\\(-1\\)', '\\(-24\\)'],
-          c: '5',
+          c: 0,
         },
         {
           q: 'Selisih akar-akar persamaan kuadrat \\(x^{2} + 3x - 4 = 0\\) adalah …',
           o: ['\\(3\\)', '\\(-3\\)', '\\(5\\)', '\\(-5\\)', '\\(8\\)'],
-          c: '5',
+          c: 2,
         },
         {
           q: 'Jika \\(\\alpha\\) dan \\(\\beta\\) adalah akar-akar persamaan kuadrat \\(x^{2} - 7x + 10 = 0\\), maka nilai \\(\\alpha + \\beta = \\ldots\\)',
           o: ['\\(10\\)', '\\(7\\)', '\\(-7\\)', '\\(5\\)', '\\(-5\\)'],
-          c: '7',
+          c: 1,
         },
         {
           q: 'Himpunan penyelesaian dari \\(8x^{2} - 48x + 64 = 0\\) adalah …',
           o: ['\\(\\{-2, -4\\}\\)', '\\(\\{-2, 4\\}\\)', '\\(\\{2, 4\\}\\)', '\\(\\{3, 2\\}\\)', '\\(\\{-3, 2\\}\\)'],
-          c: '{2, 4}',
+          c: 2,
         },
         {
           q: 'Akar-akar dari persamaan kuadrat \\(x^{2} - 9 = 0\\) adalah …',
           o: ['\\(x = 3\\) saja', '\\(x = -3\\) saja', '\\(x = 3\\) atau \\(x = -3\\)', '\\(x = 9\\) atau \\(x = -9\\)', 'Tidak real'],
-          c: 'x = 3 atau x = −3',
+          c: 2,
         },
         {
           q: 'Akar-akar dari persamaan kuadrat \\(x^{2} - 6x + 9 = 0\\) adalah …',
           o: ['\\(x = 3\\) atau \\(x = -3\\)', '\\(x = 3\\) (kembar)', '\\(x = 9\\) (kembar)', 'Tidak real', '\\(x = 1\\) atau \\(x = 9\\)'],
-          c: 'x = 3 (kembar)',
+          c: 1,
         },
         {
           q: 'Jenis akar persamaan kuadrat \\(x^{2} + 5x + 6 = 0\\) adalah …',
           o: ['Dua akar real berbeda &amp; rasional', 'Dua akar real berbeda &amp; irasional', 'Dua akar kembar', 'Tidak real', 'Tidak dapat ditentukan'],
-          c: 'Dua akar real berbeda &amp; rasional',
+          c: 0,
         },
       ];
 
@@ -1672,11 +1664,11 @@
       let currentIndex = 0;
       const totalSoal = soalData.length; // = 10
       let timerInterval = null;
-      let timeLeft = 1200; // 20 menit
+      let timeLeft = 1200; // 20 menit = 1200 detik
       let quizFinished = false;
       let warningInterval = null;
       let warningActive = false;
-      let jawabanUser = {};
+      let jawabanUser = {}; // menyimpan indeks opsi (0-4)
       let focusLostTime = 0;
       let focusInterval = null;
       const FOCUS_GRACE_PERIOD = 3000;
@@ -1728,6 +1720,7 @@
         }
       });
 
+      // ===== RENDER SOAL (pakai indeks opsi) =====
       function renderSoal(index) {
         const s = soalData[index];
         if (!s) return;
@@ -1737,9 +1730,10 @@
         html += '<div class="pertanyaan">' + s.q + '</div>';
         html += '<div class="opsi-vertical">';
         s.o.forEach((opt, i) => {
-          const sel = jawabanUser[index] === opt;
-          html += '<label class="' + (sel ? 'selected' : '') + '" onclick="pilihOpsi(' + index + ",'" + opt.replace(/'/g, "\\'") + '\')">' +
-            '<input type="radio" name="q' + index + '" value="' + opt + '"' + (sel ? ' checked' : '') + ' />' +
+          const sel = jawabanUser[index] === i;
+          // onclick memakai INDEKS opsi (i), bukan teks — menghindari masalah escaping LaTeX
+          html += '<label class="' + (sel ? 'selected' : '') + '" onclick="pilihOpsi(' + index + ',' + i + ')">' +
+            '<input type="radio" name="q' + index + '" value="' + i + '"' + (sel ? ' checked' : '') + ' />' +
             '<span class="option-label">' + labels[i] + '.</span>' +
             '<span class="option-text">' + opt + '</span></label>';
         });
@@ -1759,20 +1753,21 @@
         renderMath($('soalContainer'));
       }
 
-      window.pilihOpsi = function (index, value) {
-        jawabanUser[index] = value;
-        renderSoal(index);
+      // ===== PILIH OPSI (indeks) =====
+      window.pilihOpsi = function (soalIdx, optIdx) {
+        jawabanUser[soalIdx] = optIdx;
+        renderSoal(soalIdx);
       };
       $('btnPrev').onclick = function () {
         if (currentIndex > 0) { currentIndex--; renderSoal(currentIndex); }
       };
 
+      // ===== HITUNG SKOR (bandingkan indeks) =====
       function hitungSkor() {
         let benar = 0;
         soalData.forEach((s, i) => {
-          const ans = (jawabanUser[i] || '').replace(/\s/g, '');
-          const key = s.c.replace(/\s/g, '');
-          if (ans === key || jawabanUser[i] === s.c) benar++;
+          const chosen = jawabanUser[i];
+          if (typeof chosen === 'number' && chosen === s.c) benar++;
         });
         return benar;
       }
